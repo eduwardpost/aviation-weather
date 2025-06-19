@@ -1,0 +1,14 @@
+{
+  "domain": "aviationweather",
+  "name": "aviationweather",
+  "codeowners": [
+    "@eduwardpost"
+  ],
+  "config_flow": true,
+  "documentation": "https://www.home-assistant.io/integrations/aviationweather",
+  "iot_class": "cloud_polling",
+  "quality_scale": "bronze",
+  "requirements": [
+    "avwx-engine==1.9.4"
+  ]
+}
