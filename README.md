@@ -22,7 +22,7 @@ Search for "Aviation weather" in the HACS store. If you don't see it there, you 
 
 ## Home Assistant Integration
 
-[![Open your Home Assistant instance and start setting up a new integration of a specific brand.](https://my.home-assistant.io/badges/brand.svg)](https://my.home-assistant.io/redirect/brand/?brand=+aviation_weather)
+[![Open your Home Assistant instance and start setting up a new integration of a specific brand.](https://my.home-assistant.io/badges/brand.svg)](https://my.home-assistant.io/redirect/brand/?brand=+aviationweather)
 
 After installation, setup the integration via the web UI like any other integration. When prompted, provide the following:
 
