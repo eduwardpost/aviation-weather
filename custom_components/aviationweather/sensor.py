@@ -1,12 +1,20 @@
 """Platform for sensor integration."""
 
+from datetime import datetime
+
 from homeassistant import config_entries
 from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorEntity,
     SensorStateClass,
 )
-from homeassistant.const import UnitOfPressure, UnitOfSpeed, DEGREE
+from homeassistant.const import (
+    DEGREE,
+    UnitOfLength,
+    UnitOfPressure,
+    UnitOfSpeed,
+    UnitOfTemperature,
+)
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -27,7 +35,10 @@ async def async_setup_entry(
     icao_id = config.get(CONF_ICAO_ID)
 
     raw_sensor = RawMetarSensor(icao_id, coordinator)
+    timestamp_sensor = TimestampMetarSensor(icao_id, coordinator)
     altimeter_sensor = AltimeterMetarSensor(icao_id, coordinator)
+    temperature_sensor = TemperatureMetarSensor(icao_id, coordinator)
+    dewpoint_sensor = DewpointMetarSensor(icao_id, coordinator)
     flightrules_sensor = FlightRulesMetarSensor(icao_id, coordinator)
     visability_sensor = VisabilityMetarSensor(icao_id, coordinator)
     windspeed_sensor = WindSpeedMetarSensor(icao_id, coordinator)
@@ -36,7 +47,10 @@ async def async_setup_entry(
     async_add_entities(
         [
             raw_sensor,
+            timestamp_sensor,
             altimeter_sensor,
+            temperature_sensor,
+            dewpoint_sensor,
             flightrules_sensor,
             visability_sensor,
             windspeed_sensor,
@@ -67,6 +81,30 @@ class RawMetarSensor(SensorEntity):
         return self._coordinator.data.raw
 
 
+class TimestampMetarSensor(SensorEntity):
+    """Representation of a time METAR sensor."""
+
+    _attr_device_class = SensorDeviceClass.TIMESTAMP
+
+    def __init__(self, icao_id: str, coordinator: AviationWeatherCoordinator) -> None:
+        """Initialize the sensor."""
+        super().__init__()
+        self.entity_id = f"sensor.{DOMAIN}_{icao_id.lower()}_time"
+        self._attr_unique_id = f"{DOMAIN}_{icao_id.lower()}_time"
+        self._icao_id = icao_id
+        self._coordinator = coordinator
+
+    @property
+    def name(self) -> str:
+        """Return the name of the sensor."""
+        return "time"
+
+    @property
+    def native_value(self) -> datetime | None:
+        """Return the state of the sensor."""
+        return self._coordinator.data.time.dt
+
+
 class AltimeterMetarSensor(SensorEntity):
     """Representation of an altimeter METAR sensor."""
 
@@ -91,6 +129,58 @@ class AltimeterMetarSensor(SensorEntity):
     def native_value(self) -> int | None:
         """Return the state of the sensor."""
         return self._coordinator.data.altimeter.value or None
+
+
+class TemperatureMetarSensor(SensorEntity):
+    """Representation of an temperature METAR sensor."""
+
+    _attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
+    _attr_device_class = SensorDeviceClass.TEMPERATURE
+    _attr_state_class = SensorStateClass.MEASUREMENT
+
+    def __init__(self, icao_id: str, coordinator: AviationWeatherCoordinator) -> None:
+        """Initialize the sensor."""
+        super().__init__()
+        self.entity_id = f"sensor.{DOMAIN}_{icao_id.lower()}_temperature"
+        self._attr_unique_id = f"{DOMAIN}_{icao_id.lower()}_temperature"
+        self._icao_id = icao_id
+        self._coordinator = coordinator
+
+    @property
+    def name(self) -> str:
+        """Return the name of the sensor."""
+        return "temperature"
+
+    @property
+    def native_value(self) -> int | None:
+        """Return the state of the sensor."""
+        return self._coordinator.data.temperature.value or None
+
+
+class DewpointMetarSensor(SensorEntity):
+    """Representation of an dewpoint METAR sensor."""
+
+    _attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
+    _attr_device_class = SensorDeviceClass.TEMPERATURE
+    _attr_state_class = SensorStateClass.MEASUREMENT
+
+    def __init__(self, icao_id: str, coordinator: AviationWeatherCoordinator) -> None:
+        """Initialize the sensor."""
+        super().__init__()
+        self.entity_id = f"sensor.{DOMAIN}_{icao_id.lower()}_dewpoint"
+        self._attr_unique_id = f"{DOMAIN}_{icao_id.lower()}_dewpoint"
+        self._icao_id = icao_id
+        self._coordinator = coordinator
+
+    @property
+    def name(self) -> str:
+        """Return the name of the sensor."""
+        return "dewpoint"
+
+    @property
+    def native_value(self) -> int | None:
+        """Return the state of the sensor."""
+        return self._coordinator.data.dewpoint.value or None
 
 
 class WindSpeedMetarSensor(SensorEntity):
@@ -162,13 +252,17 @@ class FlightRulesMetarSensor(SensorEntity):
         return "flight rules"
 
     @property
-    def native_value(self) -> int | None:
+    def native_value(self) -> str | None:
         """Return the state of the sensor."""
         return self._coordinator.data.flight_rules or None
 
 
 class VisabilityMetarSensor(SensorEntity):
     """Representation of an visibility METAR sensor."""
+
+    _attr_state_class = SensorStateClass.MEASUREMENT
+    _attr_device_class = SensorDeviceClass.DISTANCE
+    _attr_native_unit_of_measurement = UnitOfLength.METERS
 
     def __init__(self, icao_id: str, coordinator: AviationWeatherCoordinator) -> None:
         """Initialize the sensor."""
