@@ -1,6 +1,6 @@
 {
   "domain": "aviationweather",
-  "name": "aviationweather",
+  "name": "AVWX",
   "codeowners": [
     "@eduwardpost"
   ],

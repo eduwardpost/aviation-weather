@@ -16,6 +16,7 @@ from homeassistant.const import (
     UnitOfTemperature,
 )
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import CONF_ICAO_ID, DOMAIN
@@ -80,6 +81,11 @@ class RawMetarSensor(SensorEntity):
         """Return the state of the sensor."""
         return self._coordinator.data.raw
 
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return the device info."""
+        return DeviceInfo(identifiers={(DOMAIN, self._icao_id)}, name=self._icao_id)
+
 
 class TimestampMetarSensor(SensorEntity):
     """Representation of a time METAR sensor."""
@@ -103,6 +109,11 @@ class TimestampMetarSensor(SensorEntity):
     def native_value(self) -> datetime | None:
         """Return the state of the sensor."""
         return self._coordinator.data.time.dt
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return the device info."""
+        return DeviceInfo(identifiers={(DOMAIN, self._icao_id)})
 
 
 class AltimeterMetarSensor(SensorEntity):
@@ -130,6 +141,11 @@ class AltimeterMetarSensor(SensorEntity):
         """Return the state of the sensor."""
         return self._coordinator.data.altimeter.value or None
 
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return the device info."""
+        return DeviceInfo(identifiers={(DOMAIN, self._icao_id)})
+
 
 class TemperatureMetarSensor(SensorEntity):
     """Representation of an temperature METAR sensor."""
@@ -156,6 +172,11 @@ class TemperatureMetarSensor(SensorEntity):
         """Return the state of the sensor."""
         return self._coordinator.data.temperature.value or None
 
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return the device info."""
+        return DeviceInfo(identifiers={(DOMAIN, self._icao_id)})
+
 
 class DewpointMetarSensor(SensorEntity):
     """Representation of an dewpoint METAR sensor."""
@@ -181,6 +202,11 @@ class DewpointMetarSensor(SensorEntity):
     def native_value(self) -> int | None:
         """Return the state of the sensor."""
         return self._coordinator.data.dewpoint.value or None
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return the device info."""
+        return DeviceInfo(identifiers={(DOMAIN, self._icao_id)})
 
 
 class WindSpeedMetarSensor(SensorEntity):
@@ -234,6 +260,11 @@ class WindDirectionMetarSensor(SensorEntity):
         """Return the state of the sensor."""
         return self._coordinator.data.wind_direction.value or None
 
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return the device info."""
+        return DeviceInfo(identifiers={(DOMAIN, self._icao_id)})
+
 
 class FlightRulesMetarSensor(SensorEntity):
     """Representation of an flight_rules METAR sensor."""
@@ -255,6 +286,11 @@ class FlightRulesMetarSensor(SensorEntity):
     def native_value(self) -> str | None:
         """Return the state of the sensor."""
         return self._coordinator.data.flight_rules or None
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return the device info."""
+        return DeviceInfo(identifiers={(DOMAIN, self._icao_id)})
 
 
 class VisabilityMetarSensor(SensorEntity):
@@ -281,3 +317,8 @@ class VisabilityMetarSensor(SensorEntity):
     def native_value(self) -> int | None:
         """Return the state of the sensor."""
         return self._coordinator.data.visibility.value or None
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return the device info."""
+        return DeviceInfo(identifiers={(DOMAIN, self._icao_id)})
