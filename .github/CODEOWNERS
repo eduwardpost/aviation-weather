@@ -1,0 +1,11 @@
+# General code owners
+
+* @eduwardpost
+
+# Source code owner
+
+/custom_components/ @eduwardpost
+
+# github management owner 
+
+/.github/ @eduwardpost
