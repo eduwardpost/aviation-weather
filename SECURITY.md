@@ -10,5 +10,5 @@ The following versions are supported with security updates
 
 ## Reporting a Vulnerability
 
-When you vulnerability please open an issue and I will try to resolve the issue as soon as possible.
+If you discover a vulnerability, please open an issue, and I will address it as soon as possible.
 This is currently an project in personal time so I cannot guarantee an resolvement time.
