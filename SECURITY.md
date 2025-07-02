@@ -11,4 +11,4 @@ The following versions are supported with security updates
 ## Reporting a Vulnerability
 
 If you discover a vulnerability, please open an issue, and I will address it as soon as possible.
-This is currently an project in personal time so I cannot guarantee an resolvement time.
+This is currently a project in personal time so I cannot guarantee a resolution time.
