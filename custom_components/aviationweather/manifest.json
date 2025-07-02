@@ -5,10 +5,10 @@
     "@eduwardpost"
   ],
   "config_flow": true,
-  "documentation": "https://github.com/eduwardpost/aviationweather",
+  "documentation": "https://github.com/eduwardpost/aviation-weather",
   "homekit": {},
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/eduwardpost/aviationweather/issues",
+  "issue_tracker": "https://github.com/eduwardpost/aviation-weather/issues",
   "requirements": [
     "avwx-engine==1.9.4"
   ],
