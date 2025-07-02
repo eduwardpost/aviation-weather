@@ -1,0 +1,14 @@
+# Add 'Documentation' label to any change to .md files within the entire repository 
+documentation:
+- changed-files:
+  - any-glob-to-any-file: '**/*.md'
+
+python:
+- changed-files:
+  - any-glob-to-any-file: ['**/*.py']
+
+enhancement:
+- head-branch: ['^feature']
+
+bug:
+- head-branch: ['^bug', '^hotfix', '^fix']	
