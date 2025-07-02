@@ -42,7 +42,7 @@ async def async_setup_entry(
     temperature_sensor = TemperatureMetarSensor(icao_id, coordinator)
     dewpoint_sensor = DewpointMetarSensor(icao_id, coordinator)
     flightrules_sensor = FlightRulesMetarSensor(icao_id, coordinator)
-    visability_sensor = VisabilityMetarSensor(icao_id, coordinator)
+    visability_sensor = VisibilityMetarSensor(icao_id, coordinator)
     windspeed_sensor = WindSpeedMetarSensor(icao_id, coordinator)
     winddirection_sensor = WindDirectionMetarSensor(icao_id, coordinator)
 
@@ -268,7 +268,7 @@ class FlightRulesMetarSensor(BaseAviationWeatherSensor):
         return self._coordinator.data.flight_rules or None
 
 
-class VisabilityMetarSensor(BaseAviationWeatherSensor):
+class VisibilityMetarSensor(BaseAviationWeatherSensor):
     """Representation of an visibility METAR sensor."""
 
     _attr_state_class = SensorStateClass.MEASUREMENT
