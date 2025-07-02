@@ -234,6 +234,11 @@ class WindSpeedMetarSensor(SensorEntity):
         """Return the state of the sensor."""
         return self._coordinator.data.wind_speed.value or None
 
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return the device info."""
+        return DeviceInfo(identifiers={(DOMAIN, self._icao_id)})
+
 
 class WindDirectionMetarSensor(SensorEntity):
     """Representation of an wind_direction METAR sensor."""
