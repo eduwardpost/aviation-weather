@@ -119,7 +119,6 @@ class TimestampMetarSensor(SensorEntity):
 class AltimeterMetarSensor(SensorEntity):
     """Representation of an altimeter METAR sensor."""
 
-    _attr_native_unit_of_measurement = UnitOfPressure.HPA
     _attr_device_class = SensorDeviceClass.ATMOSPHERIC_PRESSURE
     _attr_state_class = SensorStateClass.MEASUREMENT
 
@@ -139,6 +138,11 @@ class AltimeterMetarSensor(SensorEntity):
     @property
     def native_value(self) -> int | None:
         """Return the state of the sensor."""
+        if self._coordinator.data.altimeter is None:
+            return None
+        if self._coordinator.units.altimeter is not None:
+            self._attr_native_unit_of_measurement = self._coordinator.units.altimeter
+
         return self._coordinator.data.altimeter.value or None
 
     @property
@@ -303,7 +307,6 @@ class VisabilityMetarSensor(SensorEntity):
 
     _attr_state_class = SensorStateClass.MEASUREMENT
     _attr_device_class = SensorDeviceClass.DISTANCE
-    _attr_native_unit_of_measurement = UnitOfLength.METERS
 
     def __init__(self, icao_id: str, coordinator: AviationWeatherCoordinator) -> None:
         """Initialize the sensor."""
@@ -321,7 +324,15 @@ class VisabilityMetarSensor(SensorEntity):
     @property
     def native_value(self) -> int | None:
         """Return the state of the sensor."""
-        return self._coordinator.data.visibility.value or None
+        if self._coordinator.data.visibility is None:
+            return None
+        if self._coordinator.units.visibility is not None:
+            if self._coordinator.units.visibility == "m":
+                self._attr_native_unit_of_measurement = UnitOfLength.METERS
+            else:
+                self._attr_native_unit_of_measurement = UnitOfLength.MILES
+
+        return self._coordinator.data.visibility.value
 
     @property
     def device_info(self) -> DeviceInfo:

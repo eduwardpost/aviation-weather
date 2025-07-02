@@ -32,6 +32,7 @@ class AviationWeatherCoordinator(DataUpdateCoordinator):
         )
         self._icao = config_entry.data.get("icao_id")
         self._metar = avwx.Metar(self._icao)
+        self.units = None
 
     async def _async_setup(self):
         """Set up the coordinator.
@@ -50,4 +51,5 @@ class AviationWeatherCoordinator(DataUpdateCoordinator):
         so entities can quickly look up their data.
         """
         await self._metar.async_update()
+        self.units = self._metar.units
         return self._metar.data
