@@ -68,7 +68,6 @@ class BaseAviationWeatherSensor(CoordinatorEntity, SensorEntity):
         """Initialize the sensor."""
         super().__init__(coordinator)
         self._icao_id = icao_id
-        self._coordinator = coordinator
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -98,7 +97,7 @@ class RawMetarSensor(BaseAviationWeatherSensor):
     @property
     def native_value(self) -> str:
         """Return the state of the sensor."""
-        return self._coordinator.data.raw
+        return self.coordinator.data.raw
 
 
 class TimestampMetarSensor(BaseAviationWeatherSensor):
@@ -120,7 +119,7 @@ class TimestampMetarSensor(BaseAviationWeatherSensor):
     @property
     def native_value(self) -> datetime | None:
         """Return the state of the sensor."""
-        return self._coordinator.data.time.dt
+        return self.coordinator.data.time.dt
 
 
 class AltimeterMetarSensor(BaseAviationWeatherSensor):
@@ -144,12 +143,12 @@ class AltimeterMetarSensor(BaseAviationWeatherSensor):
     @property
     def native_value(self) -> int | None:
         """Return the state of the sensor."""
-        if self._coordinator.data.altimeter is None:
+        if self.coordinator.data.altimeter is None:
             return None
-        if self._coordinator.units.altimeter is not None:
-            self._attr_native_unit_of_measurement = self._coordinator.units.altimeter
+        if self.coordinator.units.altimeter is not None:
+            self._attr_native_unit_of_measurement = self.coordinator.units.altimeter
 
-        return self._coordinator.data.altimeter.value or None
+        return self.coordinator.data.altimeter.value or None
 
 
 class TemperatureMetarSensor(BaseAviationWeatherSensor):
@@ -173,7 +172,7 @@ class TemperatureMetarSensor(BaseAviationWeatherSensor):
     @property
     def native_value(self) -> int | None:
         """Return the state of the sensor."""
-        return self._coordinator.data.temperature.value or None
+        return self.coordinator.data.temperature.value or None
 
 
 class DewpointMetarSensor(BaseAviationWeatherSensor):
@@ -197,7 +196,7 @@ class DewpointMetarSensor(BaseAviationWeatherSensor):
     @property
     def native_value(self) -> int | None:
         """Return the state of the sensor."""
-        return self._coordinator.data.dewpoint.value or None
+        return self.coordinator.data.dewpoint.value or None
 
 
 class WindSpeedMetarSensor(BaseAviationWeatherSensor):
@@ -221,7 +220,7 @@ class WindSpeedMetarSensor(BaseAviationWeatherSensor):
     @property
     def native_value(self) -> int | None:
         """Return the state of the sensor."""
-        return self._coordinator.data.wind_speed.value or None
+        return self.coordinator.data.wind_speed.value or None
 
 
 class WindDirectionMetarSensor(BaseAviationWeatherSensor):
@@ -245,7 +244,7 @@ class WindDirectionMetarSensor(BaseAviationWeatherSensor):
     @property
     def native_value(self) -> int | None:
         """Return the state of the sensor."""
-        return self._coordinator.data.wind_direction.value or None
+        return self.coordinator.data.wind_direction.value or None
 
 
 class FlightRulesMetarSensor(BaseAviationWeatherSensor):
@@ -265,7 +264,7 @@ class FlightRulesMetarSensor(BaseAviationWeatherSensor):
     @property
     def native_value(self) -> str | None:
         """Return the state of the sensor."""
-        return self._coordinator.data.flight_rules or None
+        return self.coordinator.data.flight_rules or None
 
 
 class VisibilityMetarSensor(BaseAviationWeatherSensor):
@@ -289,12 +288,12 @@ class VisibilityMetarSensor(BaseAviationWeatherSensor):
     @property
     def native_value(self) -> int | None:
         """Return the state of the sensor."""
-        if self._coordinator.data.visibility is None:
+        if self.coordinator.data.visibility is None:
             return None
-        if self._coordinator.units.visibility is not None:
-            if self._coordinator.units.visibility == "m":
+        if self.coordinator.units.visibility is not None:
+            if self.coordinator.units.visibility == "m":
                 self._attr_native_unit_of_measurement = UnitOfLength.METERS
             else:
                 self._attr_native_unit_of_measurement = UnitOfLength.MILES
 
-        return self._coordinator.data.visibility.value
+        return self.coordinator.data.visibility.value
