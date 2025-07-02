@@ -42,7 +42,7 @@ async def async_setup_entry(
     temperature_sensor = TemperatureMetarSensor(icao_id, coordinator)
     dewpoint_sensor = DewpointMetarSensor(icao_id, coordinator)
     flightrules_sensor = FlightRulesMetarSensor(icao_id, coordinator)
-    visability_sensor = VisibilityMetarSensor(icao_id, coordinator)
+    visibility_sensor = VisibilityMetarSensor(icao_id, coordinator)
     windspeed_sensor = WindSpeedMetarSensor(icao_id, coordinator)
     winddirection_sensor = WindDirectionMetarSensor(icao_id, coordinator)
 
@@ -54,7 +54,7 @@ async def async_setup_entry(
             temperature_sensor,
             dewpoint_sensor,
             flightrules_sensor,
-            visability_sensor,
+            visibility_sensor,
             windspeed_sensor,
             winddirection_sensor,
         ]
@@ -283,7 +283,7 @@ class VisibilityMetarSensor(BaseAviationWeatherSensor):
     @property
     def name(self) -> str:
         """Return the name of the sensor."""
-        return "visability"
+        return "visibility"
 
     @property
     def native_value(self) -> int | None:
