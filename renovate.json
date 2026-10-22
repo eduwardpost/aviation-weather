@@ -1,6 +1,49 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits"
+  ],
+  "schedule": [
+    "* 10,14,16,20 * * *"
+  ],
+  "timezone": "Europe/Amsterdam",
+  "automerge": false,
+  "automergeType": "pr",
+  "automergeStrategy": "squash",
+  "commitMessagePrefix": ":arrow_up: ",
+  "prConcurrentLimit": 5,
+  "semanticCommits": "enabled",
+  "major": {
+    "enabled": true,
+    "automerge": false
+  },
+  "minor": {
+    "enabled": true,
+    "automerge": false
+  },
+  "patch": {
+    "enabled": true,
+    "automerge": true,
+    "groupName": "patch-updates"
+  },
+  "packageRules": [
+  {
+      "description": "Group all minor updates together",
+      "matchUpdateTypes": ["minor"],
+      "groupName": "minor-updates"
+    },
+    {
+      "description": "Group all patch updates together",
+      "matchUpdateTypes": ["patch"],
+      "groupName": "patch-updates"
+    },
+    {
+      "description": "Don't automerge Home Assistant manifest dependencies",
+      "matchManagers": ["homeassistant-manifest"],
+      "automerge": false
+    }
+    
   ]
 }
