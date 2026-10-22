@@ -10,7 +10,7 @@
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/eduwardpost/aviation-weather/issues",
   "requirements": [
-    "avwx-engine==1.9.4"
+    "avwx-engine==1.9.10"
   ],
   "version": "0.9.4"
 }
