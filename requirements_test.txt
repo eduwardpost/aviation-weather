@@ -1,2 +1,2 @@
-pytest-homeassistant-custom-component==0.13.205
-avwx-engine==1.9.4
+pytest-homeassistant-custom-component==0.13.373
+avwx-engine==1.9.10
