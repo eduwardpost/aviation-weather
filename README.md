@@ -33,3 +33,12 @@ After installation, setup the integration via the web UI like any other integrat
 ## Contributions
 
 Contributions are welcome!
+
+### Running tests
+
+Install the test dependencies and run the test suite from the repository root:
+
+```bash
+python -m pip install -r requirements_test.txt
+pytest
+```
