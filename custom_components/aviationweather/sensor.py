@@ -44,6 +44,7 @@ async def async_setup_entry(
     flightrules_sensor = FlightRulesMetarSensor(icao_id, coordinator)
     visibility_sensor = VisibilityMetarSensor(icao_id, coordinator)
     windspeed_sensor = WindSpeedMetarSensor(icao_id, coordinator)
+    windgust_sensor = WindGustMetarSensor(icao_id, coordinator)
     winddirection_sensor = WindDirectionMetarSensor(icao_id, coordinator)
 
     async_add_entities(
@@ -56,6 +57,7 @@ async def async_setup_entry(
             flightrules_sensor,
             visibility_sensor,
             windspeed_sensor,
+            windgust_sensor,
             winddirection_sensor,
         ]
     )
@@ -221,6 +223,33 @@ class WindSpeedMetarSensor(BaseAviationWeatherSensor):
     def native_value(self) -> int | None:
         """Return the state of the sensor."""
         return self.coordinator.data.wind_speed.value
+
+
+class WindGustMetarSensor(BaseAviationWeatherSensor):
+    """Representation of a wind_gust METAR sensor."""
+
+    _attr_native_unit_of_measurement = UnitOfSpeed.KNOTS
+    _attr_device_class = SensorDeviceClass.WIND_SPEED
+    _attr_state_class = SensorStateClass.MEASUREMENT
+
+    def __init__(self, icao_id: str, coordinator: AviationWeatherCoordinator) -> None:
+        """Initialize the sensor."""
+        super().__init__(icao_id, coordinator)
+        self.entity_id = f"sensor.{DOMAIN}_{icao_id.lower()}_wind_gust"
+        self._attr_unique_id = f"{DOMAIN}_{icao_id.lower()}_wind_gust"
+
+    @property
+    def name(self) -> str:
+        """Return the name of the sensor."""
+        return "wind gust"
+
+    @property
+    def native_value(self) -> int | None:
+        """Return the state of the sensor."""
+        # AVWX sets wind_gust to None when the METAR reports no gusts.
+        if self.coordinator.data.wind_gust is None:
+            return None
+        return self.coordinator.data.wind_gust.value
 
 
 class WindDirectionMetarSensor(BaseAviationWeatherSensor):
