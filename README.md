@@ -30,6 +30,14 @@ After installation, setup the integration via the web UI like any other integrat
 
 - The ICAO Code (ex. EHAM) in upper case letters
 
+### Data source errors
+
+If AVWX cannot fetch METAR data, Home Assistant shows a setup failure reason under
+**Settings → Devices & services** and retries setup automatically. If fetching
+fails after setup, the entities become unavailable until a successful update.
+Repeated failed updates do not generate repeated error-level messages during the
+same outage.
+
 ## Contributions
 
 Contributions are welcome!

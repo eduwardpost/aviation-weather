@@ -3,10 +3,11 @@
 import logging
 
 import avwx
+from avwx.exceptions import SourceError
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .const import COORDINATOR_UPDATE_INTERVAL
 
@@ -32,18 +33,10 @@ class AviationWeatherCoordinator(DataUpdateCoordinator):
         self.units = None
 
     async def _async_setup(self):
-        """Set up the coordinator.
-
-        This is the place to set up your coordinator,
-        or to load data, that only needs to be loaded once.
-
-        This method will be called automatically during
-        coordinator.async_config_entry_first_refresh.
-        """
+        """Fetch initial METAR data using the same error handling as updates."""
         _LOGGER.debug("Setting up aviation weather coordinator for %s", self._icao)
 
-        await self._metar.async_update()
-        self.units = self._metar.units
+        await self._async_update_data()
 
     async def _async_update_data(self):
         """Fetch data from API endpoint.
@@ -53,6 +46,9 @@ class AviationWeatherCoordinator(DataUpdateCoordinator):
         """
         _LOGGER.debug("Updating aviation weather data for %s", self._icao)
 
-        await self._metar.async_update()
+        try:
+            await self._metar.async_update()
+        except (SourceError, ConnectionError) as err:
+            raise UpdateFailed(f"Unable to fetch METAR for {self._icao}: {err}") from err
         self.units = self._metar.units
         return self._metar.data
