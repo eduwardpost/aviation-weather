@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Starts Home Assistant with this repository's custom component loaded.
+
+set -e
+
+cd "$(dirname "$0")/../.."
+
+mkdir -p "${PWD}/.devcontainer/config"
+
+# Lets Home Assistant find custom_components/aviationweather without copying or symlinking it
+export PYTHONPATH="${PYTHONPATH}:${PWD}"
+
+exec hass --config "${PWD}/.devcontainer/config" --debug "$@"
