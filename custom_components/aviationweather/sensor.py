@@ -227,8 +227,8 @@ class WindDirectionMetarSensor(BaseAviationWeatherSensor):
     """Representation of an wind_direction METAR sensor."""
 
     _attr_native_unit_of_measurement = DEGREE
-    _attr_device_class = SensorDeviceClass.WIND_DIRECTION
-    _attr_state_class = SensorStateClass.MEASUREMENT_ANGLE
+    _attr_device_class = getattr(SensorDeviceClass, "WIND_DIRECTION", None)
+    _attr_state_class = getattr(SensorStateClass, "MEASUREMENT_ANGLE", None)
 
     def __init__(self, icao_id: str, coordinator: AviationWeatherCoordinator) -> None:
         """Initialize the sensor."""
