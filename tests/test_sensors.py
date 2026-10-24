@@ -107,6 +107,44 @@ def test_optional_values_remain_unavailable(metar_coordinator):
     assert VisibilityMetarSensor("EHAM", metar_coordinator).native_value is None
 
 
+@pytest.mark.parametrize(
+    ("sensor_class", "key"),
+    [
+        (AltimeterMetarSensor, "altimeter"),
+        (TemperatureMetarSensor, "temperature"),
+        (DewpointMetarSensor, "dewpoint"),
+        (WindSpeedMetarSensor, "wind_speed"),
+        (WindDirectionMetarSensor, "wind_direction"),
+        (VisibilityMetarSensor, "visibility"),
+    ],
+)
+@pytest.mark.parametrize("value", [0, 1, None])
+def test_numeric_sensor_preserves_zero_and_missing_values(
+    metar_coordinator, sensor_class, key, value
+):
+    """Zero is a valid measurement, while missing values remain unknown."""
+    getattr(metar_coordinator.data, key).value = value
+
+    assert sensor_class("EHAM", metar_coordinator).native_value == value
+
+
+@pytest.mark.parametrize(
+    ("sensor_class", "key"),
+    [
+        (TemperatureMetarSensor, "temperature"),
+        (DewpointMetarSensor, "dewpoint"),
+    ],
+)
+@pytest.mark.parametrize("value", [-5, -25])
+def test_temperature_sensors_preserve_negative_values(
+    metar_coordinator, sensor_class, key, value
+):
+    """Below-freezing temperatures and dewpoints retain their sign."""
+    getattr(metar_coordinator.data, key).value = value
+
+    assert sensor_class("EHAM", metar_coordinator).native_value == value
+
+
 def test_wind_direction_metadata_matches_home_assistant_support(metar_coordinator):
     """Use wind direction metadata when the installed Home Assistant supports it."""
     sensor = WindDirectionMetarSensor("EHAM", metar_coordinator)
