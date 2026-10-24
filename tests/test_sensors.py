@@ -15,6 +15,7 @@ from custom_components.aviationweather.sensor import (
     TimestampMetarSensor,
     VisibilityMetarSensor,
     WindDirectionMetarSensor,
+    WindGustMetarSensor,
     WindSpeedMetarSensor,
     async_setup_entry,
 )
@@ -33,6 +34,7 @@ def metar_coordinator():
         flight_rules="VFR",
         visibility=SimpleNamespace(value=10000),
         wind_speed=SimpleNamespace(value=10),
+        wind_gust=SimpleNamespace(value=25),
         wind_direction=SimpleNamespace(value=240),
     )
     return SimpleNamespace(
@@ -57,6 +59,7 @@ def metar_coordinator():
         (FlightRulesMetarSensor, "flight_rules", "VFR", None),
         (VisibilityMetarSensor, "visibility", 10000, UnitOfLength.METERS),
         (WindSpeedMetarSensor, "wind_speed", 10, "kn"),
+        (WindGustMetarSensor, "wind_gust", 25, "kn"),
         (WindDirectionMetarSensor, "wind_direction", 240, "°"),
     ],
 )
@@ -74,8 +77,8 @@ def test_sensor_values_and_identity(
         assert sensor.native_unit_of_measurement == expected_unit
 
 
-async def test_setup_adds_nine_sensors(hass, metar_coordinator):
-    """Setup creates the established set of nine METAR sensors."""
+async def test_setup_adds_all_sensors(hass, metar_coordinator):
+    """Setup creates the established set of METAR sensors."""
     config_entry = SimpleNamespace(
         data={"icao_id": "EHAM"},
         entry_id="entry_id",
@@ -94,6 +97,7 @@ async def test_setup_adds_nine_sensors(hass, metar_coordinator):
         f"sensor.{DOMAIN}_eham_flight_rules",
         f"sensor.{DOMAIN}_eham_visibility",
         f"sensor.{DOMAIN}_eham_wind_speed",
+        f"sensor.{DOMAIN}_eham_wind_gust",
         f"sensor.{DOMAIN}_eham_wind_direction",
     ]
 
@@ -102,9 +106,19 @@ def test_optional_values_remain_unavailable(metar_coordinator):
     """Optional AVWX values continue to yield no sensor state."""
     metar_coordinator.data.altimeter = None
     metar_coordinator.data.visibility = None
+    metar_coordinator.data.wind_gust = None
 
     assert AltimeterMetarSensor("EHAM", metar_coordinator).native_value is None
     assert VisibilityMetarSensor("EHAM", metar_coordinator).native_value is None
+    assert WindGustMetarSensor("EHAM", metar_coordinator).native_value is None
+
+
+def test_wind_gust_metadata(metar_coordinator):
+    """Wind gust uses Home Assistant's wind speed metadata."""
+    sensor = WindGustMetarSensor("EHAM", metar_coordinator)
+
+    assert sensor.device_class is SensorDeviceClass.WIND_SPEED
+    assert sensor.state_class is SensorStateClass.MEASUREMENT
 
 
 @pytest.mark.parametrize(
@@ -114,6 +128,7 @@ def test_optional_values_remain_unavailable(metar_coordinator):
         (TemperatureMetarSensor, "temperature"),
         (DewpointMetarSensor, "dewpoint"),
         (WindSpeedMetarSensor, "wind_speed"),
+        (WindGustMetarSensor, "wind_gust"),
         (WindDirectionMetarSensor, "wind_direction"),
         (VisibilityMetarSensor, "visibility"),
     ],
