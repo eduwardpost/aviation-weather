@@ -1,3 +1,5 @@
+from unittest.mock import AsyncMock, patch
+
 from homeassistant import config_entries
 from homeassistant.data_entry_flow import FlowResultType
 from pytest_homeassistant_custom_component.common import MockConfigEntry
@@ -5,7 +7,12 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 from custom_components.aviationweather.const import CONF_ICAO_ID, DOMAIN
 
 
-async def test_user_flow_creates_entry(hass):
+@patch(
+    "homeassistant.config_entries.ConfigEntries.async_setup",
+    new_callable=AsyncMock,
+    return_value=True,
+)
+async def test_user_flow_creates_entry(mock_setup, hass):
     """The user flow accepts an ICAO and creates a titled config entry."""
     result = await hass.config_entries.flow.async_init(
         DOMAIN, context={"source": config_entries.SOURCE_USER}
