@@ -1,7 +1,7 @@
 {
   "name": "AVWX Home Assistant integration",
   "image": "mcr.microsoft.com/devcontainers/python:3.14-trixie",
-  "postCreateCommand": ".devcontainer/scripts/setup",
+  "postCreateCommand": "bash .devcontainer/scripts/setup",
   "forwardPorts": [8123],
   "portsAttributes": {
     "8123": {
