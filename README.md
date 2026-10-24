@@ -42,3 +42,14 @@ Install the test dependencies and run the test suite from the repository root:
 python -m pip install -r requirements_test.txt
 pytest
 ```
+### Dev container
+
+The repository includes a [dev container](.devcontainer/devcontainer.json) with Python and a pre-installed Home Assistant (same version as the test dependencies).
+
+1. Open the repository in VS Code and choose **Reopen in Container**.
+2. Start Home Assistant with this integration loaded:
+   - **Debugging:** Run and Debug → **Home Assistant (debug)** (breakpoints in `custom_components/aviationweather` work).
+   - **Without debugger:** run `.devcontainer/scripts/develop` (or the **Run Home Assistant on port 8123** task).
+3. Open <http://localhost:8123>, complete onboarding, and add the **AVWX** integration under *Settings → Devices & services*.
+
+The Home Assistant config lives in [`.devcontainer/config/`](.devcontainer/config/configuration.yaml); runtime files created there are ignored by git.

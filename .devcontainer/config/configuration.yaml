@@ -1,0 +1,16 @@
+# Development configuration, used by .devcontainer/scripts/develop and the VS Code debugger.
+# A lean subset of default_config (which needs extra binaries such as go2rtc).
+config:
+frontend:
+history:
+logbook:
+my:
+person:
+search:
+sun:
+system_health:
+
+logger:
+  default: info
+  logs:
+    custom_components.aviationweather: debug

@@ -1,3 +1,6 @@
 **\_pycache__
 venv
 .pytest_cache
+# Home Assistant dev instance runtime files
+.devcontainer/config/*
+!.devcontainer/config/configuration.yaml

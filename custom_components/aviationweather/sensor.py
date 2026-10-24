@@ -148,7 +148,7 @@ class AltimeterMetarSensor(BaseAviationWeatherSensor):
         if self.coordinator.units.altimeter is not None:
             self._attr_native_unit_of_measurement = self.coordinator.units.altimeter
 
-        return self.coordinator.data.altimeter.value or None
+        return self.coordinator.data.altimeter.value
 
 
 class TemperatureMetarSensor(BaseAviationWeatherSensor):
@@ -172,7 +172,7 @@ class TemperatureMetarSensor(BaseAviationWeatherSensor):
     @property
     def native_value(self) -> int | None:
         """Return the state of the sensor."""
-        return self.coordinator.data.temperature.value or None
+        return self.coordinator.data.temperature.value
 
 
 class DewpointMetarSensor(BaseAviationWeatherSensor):
@@ -196,7 +196,7 @@ class DewpointMetarSensor(BaseAviationWeatherSensor):
     @property
     def native_value(self) -> int | None:
         """Return the state of the sensor."""
-        return self.coordinator.data.dewpoint.value or None
+        return self.coordinator.data.dewpoint.value
 
 
 class WindSpeedMetarSensor(BaseAviationWeatherSensor):
@@ -220,7 +220,7 @@ class WindSpeedMetarSensor(BaseAviationWeatherSensor):
     @property
     def native_value(self) -> int | None:
         """Return the state of the sensor."""
-        return self.coordinator.data.wind_speed.value or None
+        return self.coordinator.data.wind_speed.value
 
 
 class WindDirectionMetarSensor(BaseAviationWeatherSensor):
@@ -244,7 +244,7 @@ class WindDirectionMetarSensor(BaseAviationWeatherSensor):
     @property
     def native_value(self) -> int | None:
         """Return the state of the sensor."""
-        return self.coordinator.data.wind_direction.value or None
+        return self.coordinator.data.wind_direction.value
 
 
 class FlightRulesMetarSensor(BaseAviationWeatherSensor):
